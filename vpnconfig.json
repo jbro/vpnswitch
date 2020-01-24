@@ -1,0 +1,15 @@
+{
+  "profile_path": "/etc/openvpn/client",
+  "profiles": {
+    "exampe_profile":
+    {
+      "country": "us",
+      "city": "New York"
+    },
+    "example_profile2":
+    {
+      "country": "gb",
+      "city": "East London"
+    }
+  }
+}
