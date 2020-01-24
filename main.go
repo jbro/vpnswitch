@@ -19,7 +19,7 @@ func main() {
 	}
 
 	muxer := http.NewServeMux()
-	muxer.Handle("/", http.FileServer(http.Dir("web/")))
+	muxer.Handle("/", http.FileServer(http.Dir(os.Args[3])))
 	muxer.HandleFunc("/vpn/connect", vman.VPNConnectHandler)
 	muxer.HandleFunc("/vpn/disconnect", vman.VPNDisconnectHandler)
 	muxer.HandleFunc("/vpn/list", vman.VPNListHandler)
