@@ -13,20 +13,24 @@ import (
 )
 
 func main() {
-	vman, err := vpn.NewManager(os.Args[1])
+	bindAddr := os.Getenv("BIND_ADDRESS")
+	vpnConf := os.Getenv("VPN_CONF")
+	webDir := os.Getenv("WEB_DIR")
+
+	vman, err := vpn.NewManager(vpnConf)
 	if err != nil {
 		log.Fatalf("Could not create VPN Manager: %s", err)
 	}
 
 	muxer := http.NewServeMux()
-	muxer.Handle("/", http.FileServer(http.Dir(os.Args[3])))
+	muxer.Handle("/", http.FileServer(http.Dir(webDir)))
 	muxer.HandleFunc("/vpn/connect", vman.VPNConnectHandler)
 	muxer.HandleFunc("/vpn/disconnect", vman.VPNDisconnectHandler)
 	muxer.HandleFunc("/vpn/list", vman.VPNListHandler)
 	muxer.HandleFunc("/vpn/stream", vman.SSEHandler)
 
 	server := http.Server{}
-	server.Addr = os.Args[2]
+	server.Addr = bindAddr
 	server.Handler = handlers.LoggingHandler(os.Stdout, muxer)
 
 	sigs := make(chan os.Signal, 1)
